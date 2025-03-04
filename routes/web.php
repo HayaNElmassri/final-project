@@ -26,10 +26,28 @@ Route::get('/about',function() {
     
 });
 Route::get('tasks',function(){
-return view ('tasks');
+  $tasks = DB::table(table: 'tasks')->get();
+    return view ('tasks',compact(var_name:'tasks'));
+
 });
 Route::post('create',function(){
     $task_name=$_POST['name'];
     DB::table(table: 'tasks')->insert(values:['name'=>$task_name]);
-    return view ('tasks');
+    return redirect()->back();
     });
+
+Route::post('delete/{id}', function($id){
+DB::table(table: 'tasks')->where(column:'id',operator:$id)->delete();
+
+        return redirect()->back();
+        });
+        Route::post('edit/{id}', function($id){
+           $task= DB::table(table: 'tasks')->where(column:'id',operator:$id)->first();
+           $tasks= DB::table(table: 'tasks')->get();
+                    return view('tasks',compact('task','tasks'));
+                    });
+        Route:: post('update', function(){
+        $id = $_POST['id'];
+            DB::table(table:'tasks')->where(column:'id',operator:'=',value:$id)->update(['name' => $_POST['name']]);
+            return redirect(to:'tasks');
+        });
