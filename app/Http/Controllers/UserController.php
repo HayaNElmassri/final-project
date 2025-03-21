@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\support\Facades\DB;
+use App\Models\User;
 class UserController extends Controller
     {
         public function index(){
@@ -25,13 +26,16 @@ class UserController extends Controller
             return redirect()->back();
         }
         public function remove($id){
-            DB::table(table: 'users')->where(column:'id',operator:$id)->delete();
-    
+          //  DB::table(table: 'users')->where(column:'id',operator:$id)->delete();
+           User ::findOrFail($id)->delete();
+           
             return redirect()->back();
         }
         public function modify($id){
-            $user= DB::table(table: 'users')->where(column:'id',operator:$id)->first();
-            $users= DB::table(table: 'users')->get();
+           // $user= DB::table(table: 'users')->where(column:'id',operator:$id)->first();
+            //$users= DB::table(table: 'users')->get();
+            User ::findOrFail($id);
+            $user = User ::all();
                      return view('users',compact('user','users'));
     }
     public function upgrade(){
